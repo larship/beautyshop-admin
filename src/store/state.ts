@@ -5,13 +5,13 @@ import Client from '@/models/Client';
 export type State = {
   loading: boolean;
   client: Client | null;
-  beautyshopCheckInList: CheckInItem[] | null;
+  checkInList: CheckInItem[] | null;
   beautyshopList: Beautyshop[] | null;
 };
 
 export const state: State = {
   loading: JSON.parse(localStorage.getItem('loading') ?? 'false') as boolean,
   client: JSON.parse(localStorage.getItem('client') ?? 'null') as Client,
-  beautyshopCheckInList: JSON.parse(localStorage.getItem('beautyshop-check-in-list') ?? '[]') as CheckInItem[],
+  checkInList: [],
   beautyshopList: JSON.parse(localStorage.getItem('beautyshop-list') ?? '[]') as Beautyshop[],
 };

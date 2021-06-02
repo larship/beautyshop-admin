@@ -58,7 +58,7 @@ export const actions: ActionTree<State, State> & Actions = {
     commit(MutationType.SetLoading, true);
 
     const checkInList = await getBeautyshopCheckInList(data.beautyshopUuid, data.dateFrom, data.dateTo);
-    commit(MutationType.SetBeautyshopCheckInList, checkInList);
+    commit(MutationType.SetCheckInList, checkInList);
 
     commit(MutationType.SetLoading, false);
   },

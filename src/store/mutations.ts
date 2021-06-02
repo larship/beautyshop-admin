@@ -8,14 +8,14 @@ export enum MutationType {
   SetClient = 'SET_CLIENT',
   SetLoading = 'SET_LOADING',
   SetBeautyshopList = 'SET_BEAUTYSHOP_LIST',
-  SetBeautyshopCheckInList = 'SET_BEAUTYSHOP_CHECKIN_LIST',
+  SetCheckInList = 'SET_CHECKIN_LIST',
 }
 
 export type Mutations = {
   [MutationType.SetLoading](state: State, value: boolean): void;
   [MutationType.SetClient](state: State, client: Client | null): void;
   [MutationType.SetBeautyshopList](state: State, list: Beautyshop[] | null): void;
-  [MutationType.SetBeautyshopCheckInList](state: State, list: CheckInItem[] | null): void;
+  [MutationType.SetCheckInList](state: State, list: CheckInItem[] | null): void;
 }
 
 export const mutations: MutationTree<State> & Mutations = {
@@ -34,8 +34,7 @@ export const mutations: MutationTree<State> & Mutations = {
     localStorage.setItem('beautyshop-list', JSON.stringify(state.beautyshopList));
   },
 
-  [MutationType.SetBeautyshopCheckInList](state, value) {
-    state.beautyshopCheckInList = value;
-    localStorage.setItem('beautyshop-check-in-list', JSON.stringify(value));
+  [MutationType.SetCheckInList](state, value) {
+    state.checkInList = value;
   },
 }

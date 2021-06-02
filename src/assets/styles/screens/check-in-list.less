@@ -1,77 +1,47 @@
-.screen-check-in-list {
-  //min-height: calc(100vh - 65px); // Учитывать ещё панель текущей записи
+.check-in-list-screen {
+  text-align: left;
+  margin: @pageMargin;
+  display: grid;
+  grid-template-rows: 1fr 50px;
+  grid-row-gap: 15px;
+  height: calc(100vh - @headerHeight - 20px);
 
-  header {
-    font-size: 14pt;
-    padding: @pageMargin;
-    border-bottom: 1px solid #dddddd;
-    box-shadow: 0px 1px 3px 0px rgba(150, 150, 150, 0.5);
-    margin-bottom: 10px;
+  .check-in-list {
+    max-height: calc(100vh - 148px);
+    overflow-y: scroll;
 
-    .header--title {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .header--switcher {
-      margin-top: 10px;
-
-      span + span {
-        margin-left: 25px;
-      }
-
-      .selected {
-        border-bottom: 2px solid cornflowerblue;
-      }
-    }
-  }
-
-  .loading {
-    text-align: center;
-  }
-
-  .location-choose-form {
-    position: fixed;
-    left: 0px;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    text-align: center;
-    background-color: #ffffff;
-    font-size: 14pt;
-
-    .location-item {
-      padding: 15px 10px;
-      border-bottom: 1px solid #c8c8c8;
-    }
-  }
-
-  .beautyshop-list {
-    .beautyshop {
+    .check-in-item {
       display: grid;
-      grid-template-columns: 1fr 50px;
-      justify-content: space-between;
-      align-items: center;
+      grid-template-columns: 1fr 130px 20px;
       padding: 10px;
       padding-top: 15px;
       padding-bottom: 15px;
       border-top: 1px solid #c8c8c8;
       border-bottom: 1px solid #c8c8c8;
-      //border-radius: 5px;
       background-color: #ffffff;
 
-      &--name {
-        margin-bottom: 10px;
+      &.active {
+        background-color: #01c251;
+        color: #ffffff;
       }
 
-      &--favorite {
-        font-size: 22pt;
-        text-align: center;
+      &.cancelled {
+        background-color: #dddddd;
+      }
+
+      &--cancel {
+        align-self: center;
+        background: none;
+        padding: 0;
       }
     }
 
-    .beautyshop + .beautyshop {
-      margin-top: 7px;
+    .check-in-item + .check-in-item {
+      border-top: 0;
     }
+  }
+
+  .buttons-container {
+    margin-top: 0px;
   }
 }

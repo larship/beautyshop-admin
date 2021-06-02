@@ -13,4 +13,5 @@ export default interface CheckInItem {
   endDate: Date;
   createdTime: Date;
   price: number;
+  deleted: boolean;
 }

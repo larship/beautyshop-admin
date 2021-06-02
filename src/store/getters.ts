@@ -7,7 +7,7 @@ import Client from '@/models/Client';
 export type Getters = {
   getIsLoading(state: State): () => boolean;
   getClient(state: State): () => Client | null;
-  getBeautyshopCheckInList(state: State): () => CheckInItem[] | null;
+  getCheckInList(state: State): () => CheckInItem[] | null;
   getBeautyshopList(state: State): () => Beautyshop[] | null;
   getBeautyshop(state: State): (uuid: string) => Beautyshop | null;
 }
@@ -34,7 +34,7 @@ export const getters: GetterTree<State, State> & Getters = {
     return beautyshop || null;
   },
 
-  getBeautyshopCheckInList: (state: State) => () => {
-    return state.beautyshopCheckInList;
+  getCheckInList: (state: State) => () => {
+    return state.checkInList;
   },
 }

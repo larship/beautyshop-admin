@@ -1,8 +1,5 @@
 <template>
   <div class="screen-statistics">
-    <header>
-      <span class="header--title">Статистика</span>
-    </header>
     <div class="loading" v-if="isLoading">Загрузка...</div>
     <div class="statistics-container">
       <div class="info-statistics--title">Административная статистика</div>
