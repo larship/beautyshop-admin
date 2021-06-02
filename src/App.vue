@@ -23,18 +23,14 @@ export default defineComponent({
     const currentRoute = computed(() => router.currentRoute.value);
 
     const getRouteTitle = (route: RouteLocationNormalizedLoaded) => {
+      const beautyshop = store.getters.getBeautyshop(route.params.uuid as string);
+
       switch (route.name) {
-        case 'List':
-          return 'Каталог';
+        case 'CheckInList':
+          return 'Список записей - ' + beautyshop?.name;
 
-        case 'Info':
-        case 'CheckIn': {
-          let beautyshop = store.getters.getBeautyshop(route.params.uuid as string);
-          return beautyshop?.name ?? 'Информация о салоне';
-        }
-
-        case 'UserCheckInList':
-          return 'Мои записи';
+        case 'Statistics':
+          return 'Статистика - ' + beautyshop?.name;
       }
 
       return '';
