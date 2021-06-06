@@ -4,22 +4,21 @@ import Statistics from '@/components/Statistics.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/check-in-list/:uuid',
+    path: '/',
     name: 'CheckInList',
     component: CheckInList,
-    props: true
   },
   {
-    path: '/statistics/:uuid',
+    // path: '/statistics/:uuid',
+    path: '/statistics/',
     name: 'Statistics',
     component: Statistics,
-    props: true
   },
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
+  routes,
 })
 
 export default router
