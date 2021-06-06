@@ -2,7 +2,11 @@
   <div class="screen-statistics">
     <div class="loading" v-if="isLoading">Загрузка...</div>
     <div class="statistics-container">
-      <div class="info-statistics--title">Административная статистика<br>TODO Добавить возможность выгрузки статистики</div>
+      <div class="info-statistics--title">
+        Административная статистика
+        <br>TODO Добавить возможность выгрузки статистики
+        <br>TODO Добавить возможность выбора другого салона красоты
+      </div>
       <select>
         <option>Сегодня</option>
         <option>Вчера</option>
