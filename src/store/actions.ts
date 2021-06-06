@@ -2,7 +2,7 @@ import { ActionContext, ActionTree } from 'vuex';
 import { Mutations, MutationType } from './mutations';
 import { State } from './state';
 import { getBeautyshopCheckInList } from '@/services/checkIn';
-import { getBeautyshopList } from '@/services/beautyshop';
+import { getBeautyshopListByAdmin } from '@/services/beautyshop';
 import Client from '@/models/Client';
 import { authClient } from '@/services/auth';
 
@@ -34,7 +34,7 @@ interface GetBeautyshopCheckInListParams {
 }
 
 interface GetBeautyshopListParams {
-  location: string;
+  adminUuid: string;
 }
 
 export type Actions = {
@@ -66,7 +66,7 @@ export const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.GetBeautyshopList]({commit}, data: GetBeautyshopListParams) {
     commit(MutationType.SetLoading, true);
 
-    const beautyshops = await getBeautyshopList(data.location);
+    const beautyshops = await getBeautyshopListByAdmin(data.adminUuid);
     commit(MutationType.SetBeautyshopList, beautyshops);
 
     commit(MutationType.SetLoading, false);

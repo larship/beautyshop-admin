@@ -1,8 +1,8 @@
 import Beautyshop from '@/models/Beautyshop';
 import { fetchDataList } from '@/api';
 
-export function getBeautyshopList(city: string): Promise<Beautyshop[]> {
-  return fetchDataList<Beautyshop>('/beautyshops?city=' + city).then((data: Beautyshop[] | null) => {
+export function getBeautyshopListByAdmin(adminUuid: string): Promise<Beautyshop[]> {
+  return fetchDataList<Beautyshop>('/beautyshop/list-for-admin?adminUuid=' + adminUuid).then((data: Beautyshop[] | null) => {
     if (!data) {
       return [];
     }
