@@ -6,7 +6,6 @@
       </div>
     </header>
     <router-view/>
-    <NavBar/>
   </div>
 </template>
 <script lang="ts">
@@ -14,10 +13,8 @@ import { computed, defineComponent, ref, watch } from 'vue';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { useStore } from '@/store';
 import router from '@/router';
-import NavBar from '@/components/NavBar.vue';
 
 export default defineComponent({
-  components: {NavBar},
   setup() {
     const store = useStore();
     const currentRoute = computed(() => router.currentRoute.value);

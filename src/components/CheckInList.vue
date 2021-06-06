@@ -1,7 +1,9 @@
 <template>
-<!--  <popup v-if="showCancelPopup" @submit-popup="showCancelPopup = false; cancelCheckIn(checkInUuidToCancel, true)"-->
-<!--         @close-popup="showCancelPopup = false" title="Вы уверены, что хотите отменить запись?" two-buttons="true"></popup>-->
   <div class="check-in-list-screen">
+    <select>
+      <option>Сахар</option>
+      <option>Место красоты</option>
+    </select>
     <div class="check-in-list">
       <div v-for="checkInItem in checkInList" v-bind:key="checkInItem.uuid"
            v-bind:class="{ 'active': checkInItem.isActive, 'cancelled': checkInItem.isDeleted }" class="check-in-item">
@@ -19,7 +21,7 @@
       </div>
     </div>
     <div class="buttons-container buttons-container__single">
-      <button @click="goToStatistics()">Статистика</button>
+      <button @click="goToStatistics()">К статистике</button>
     </div>
   </div>
 </template>
@@ -47,7 +49,6 @@ interface CheckInViewItem {
 }
 
 export default defineComponent({
-  // components: {Popup},
   setup() {
     dayjs.locale(LocaleRu);
     dayjs.extend(Utc);
@@ -55,7 +56,7 @@ export default defineComponent({
     const store = useStore();
     const client = store.getters.getClient();
     const checkInList = computed<CheckInViewItem[]>(() => {
-      let list = store.getters.getCheckInList();
+      const list = store.getters.getCheckInList();
 
       if (!list) {
         return [];
@@ -90,6 +91,12 @@ export default defineComponent({
           dateTo: dayjs().endOf('year').utc().format('YYYY-MM-DD HH:mm:ss'),
         });
       }
+    }
+
+    if (client) {
+      store.dispatch(ActionTypes.GetBeautyshopList, {
+        adminUuid: client.uuid
+      });
     }
 
     updateList();
