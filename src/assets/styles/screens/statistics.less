@@ -1,6 +1,10 @@
-.screen-statistics {
+.statistics-screen {
   text-align: left;
   margin: @pageMargin;
+  display: grid;
+  grid-template-rows: 55px 55px 55px 1fr 50px;
+  grid-row-gap: 15px;
+  height: calc(100vh - @headerHeight - 17px);
 
   select {
     width: 100%;
@@ -19,14 +23,9 @@
   }
 
   .info-statistics {
-    margin-top: 10px;
+    max-height: calc(100vh - 148px);
 
-    &--title {
-      margin-top: 10px;
-      padding-bottom: 5px;
-    }
-
-    &--block {
+    &--summary {
       margin-top: 10px;
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -44,8 +43,6 @@
   }
 
   .buttons-container {
-    margin-top: 15px;
-
     > button {
       width: 100%;
     }
