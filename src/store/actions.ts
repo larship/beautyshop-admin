@@ -21,8 +21,6 @@ type ActionAugments = Omit<ActionContext<State, State>, 'commit'> & {
 
 interface AuthorizeClientParams {
   clientUuid?: string;
-  phone?: string;
-  fullName?: string;
   sessionId?: string;
   salt?: string;
 }
@@ -40,6 +38,7 @@ interface GetBeautyshopListParams {
 export type Actions = {
   [ActionTypes.GetBeautyshopCheckInList](context: ActionAugments, data: GetBeautyshopCheckInListParams): void;
   [ActionTypes.GetBeautyshopList](context: ActionAugments, data: GetBeautyshopListParams): void;
+  [ActionTypes.AuthorizeClient](context: ActionAugments, data: AuthorizeClientParams): Promise<Client | null>;
 }
 
 export const actions: ActionTree<State, State> & Actions = {

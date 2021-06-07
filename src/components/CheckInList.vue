@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, onBeforeMount, ref } from 'vue';
 import { useStore } from '@/store';
 import { ActionTypes } from '@/store/actions';
 import CheckInItem from '@/models/CheckInItem';
@@ -35,7 +35,6 @@ import dayjs from 'dayjs';
 import LocaleRu from 'dayjs/locale/ru';
 import Utc from 'dayjs/plugin/utc';
 import router from '@/router';
-// import Popup from '@/components/Popup.vue';
 
 interface CheckInViewItem {
   uuid: string;
@@ -54,7 +53,17 @@ export default defineComponent({
     dayjs.extend(Utc);
 
     const store = useStore();
+
+    onBeforeMount(async () => {
+      await store.dispatch(ActionTypes.AuthorizeClient, {
+        clientUuid: "a3c2e100-cd5f-4b41-91aa-34b1dd810020",
+        sessionId: "181724eb5b80f7bca4e06ae0aad614fb21ee0c19b9dff36e57b130273e3e802d",
+        salt: "5103997edea52b97c2845d58d88e4aeaa02ed32f412cbf3eb9aa686ec81b3cd3",
+      });
+    });
+
     const client = store.getters.getClient();
+
     const checkInList = computed<CheckInViewItem[]>(() => {
       const list = store.getters.getCheckInList();
 
@@ -80,7 +89,7 @@ export default defineComponent({
     const checkInUuidToCancel = ref('');
 
     const goToStatistics = () => {
-      router.push({name: 'Statistics', params: {uuid: '73b00c6d-a503-46b2-ae50-2bf609a82973'}});
+      router.push({name: 'Statistics'});
     }
 
     const updateList = () => {
