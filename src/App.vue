@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <header>
+    <header v-if="needShowHeader">
       <div class="header--title">
         <span>{{ routeTitle }}</span>
       </div>
@@ -9,18 +9,19 @@
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch } from 'vue';
 import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { useStore } from '@/store';
 import router from '@/router';
+import { MutationType } from '@/store/mutations';
 
 export default defineComponent({
   setup() {
     const store = useStore();
-    const currentRoute = computed(() => router.currentRoute.value);
+    const needShowHeader = ref(false);
 
     const getRouteTitle = (route: RouteLocationNormalizedLoaded) => {
-      const beautyshop = store.getters.getBeautyshop(route.params.uuid as string);
+      const beautyshop = store.getters.getCurrentBeautyshop();
 
       switch (route.name) {
         case 'CheckInList':
@@ -33,16 +34,24 @@ export default defineComponent({
       return '';
     };
 
-    const routeTitle = ref(getRouteTitle(currentRoute.value));
+    const routeTitle = ref(getRouteTitle(router.currentRoute.value));
 
     watch(
-        currentRoute,
+        () => router.currentRoute.value,
         (value) => {
           routeTitle.value = getRouteTitle(value);
+          needShowHeader.value = value.name != 'Hello';
         }
     );
 
+    store.subscribe((mutation) => {
+      if (mutation.type === MutationType.SetCurrentBeautyshop) {
+        routeTitle.value = getRouteTitle(router.currentRoute.value);
+      }
+    });
+
     return {
+      needShowHeader,
       routeTitle,
     }
   }
