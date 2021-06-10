@@ -1,15 +1,20 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import CheckInList from '@/components/CheckInList.vue';
 import Statistics from '@/components/Statistics.vue';
+import Hello from '@/components/Hello.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    name: 'CheckInList',
-    component: CheckInList,
+    name: 'Hello',
+    component: Hello
   },
   {
-    // path: '/statistics/:uuid',
+    path: '/list',
+    name: 'CheckInList',
+    component: CheckInList
+  },
+  {
     path: '/statistics/',
     name: 'Statistics',
     component: Statistics,
