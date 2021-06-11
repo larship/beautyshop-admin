@@ -1,0 +1,49 @@
+.hello-screen {
+  padding: @pageMargin;
+  display: grid;
+  height: 100vh;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  box-sizing: border-box;
+
+  .input-title, .input-desc {
+    color: #777777;
+    padding-bottom: 10px;
+    display: inline-block;
+  }
+
+  .input-container {
+    align-items: center;
+    margin-bottom: 15px;
+
+    &__two-rows {
+      display: grid;
+      grid-template-columns: 30px 1fr;
+    }
+
+    &:not(&__two-rows) {
+      input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      select {
+        width: 100%;
+      }
+    }
+
+    span {
+      font-size: 14pt;
+      justify-self: center;
+    }
+  }
+
+  .user-agreement-info {
+    font-size: 11pt;
+    text-align: center;
+  }
+
+  button {
+    width: 100%;
+  }
+}
