@@ -1,8 +1,9 @@
 <template>
   <div class="check-in-list-screen">
-    <select>
-      <option>Сахар</option>
-      <option>Место красоты</option>
+    <select v-model="currentBeautyshop">
+      <option v-for="beautyshop in beautyshopList" v-bind:key="beautyshop.uuid" v-bind:value="beautyshop">
+        {{ beautyshop.name }}
+      </option>
     </select>
     <div class="check-in-list">
       <div v-for="checkInItem in checkInList" v-bind:key="checkInItem.uuid"
@@ -27,7 +28,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onBeforeMount, ref } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import { useStore } from '@/store';
 import { ActionTypes } from '@/store/actions';
 import CheckInItem from '@/models/CheckInItem';
@@ -35,6 +36,7 @@ import dayjs from 'dayjs';
 import LocaleRu from 'dayjs/locale/ru';
 import Utc from 'dayjs/plugin/utc';
 import router from '@/router';
+import Beautyshop from '@/models/Beautyshop';
 
 interface CheckInViewItem {
   uuid: string;
@@ -53,16 +55,11 @@ export default defineComponent({
     dayjs.extend(Utc);
 
     const store = useStore();
-
-    onBeforeMount(async () => {
-      await store.dispatch(ActionTypes.AuthorizeClient, {
-        clientUuid: "a3c2e100-cd5f-4b41-91aa-34b1dd810020",
-        sessionId: "181724eb5b80f7bca4e06ae0aad614fb21ee0c19b9dff36e57b130273e3e802d",
-        salt: "5103997edea52b97c2845d58d88e4aeaa02ed32f412cbf3eb9aa686ec81b3cd3",
-      });
-    });
-
     const client = store.getters.getClient();
+    const beautyshopList = store.getters.getBeautyshopList();
+    const showCancelPopup = ref(false);
+    const checkInUuidToCancel = ref('');
+    const currentBeautyshop = ref<Beautyshop | null>(null);
 
     const checkInList = computed<CheckInViewItem[]>(() => {
       const list = store.getters.getCheckInList();
@@ -85,17 +82,14 @@ export default defineComponent({
       });
     });
 
-    const showCancelPopup = ref(false);
-    const checkInUuidToCancel = ref('');
-
     const goToStatistics = () => {
       router.push({name: 'Statistics'});
     }
 
     const updateList = () => {
-      if (client) {
+      if (client && currentBeautyshop.value) {
         store.dispatch(ActionTypes.GetBeautyshopCheckInList, {
-          beautyshopUuid: '73b00c6d-a503-46b2-ae50-2bf609a82973',
+          beautyshopUuid: currentBeautyshop.value.uuid,
           dateFrom: dayjs().startOf('year').utc().format('YYYY-MM-DD HH:mm:ss'),
           dateTo: dayjs().endOf('year').utc().format('YYYY-MM-DD HH:mm:ss'),
         });
@@ -108,8 +102,6 @@ export default defineComponent({
       });
     }
 
-    updateList();
-
     const cancelCheckIn = (checkInUuid: string, force: boolean) => {
       if (!force) {
         checkInUuidToCancel.value = checkInUuid;
@@ -120,12 +112,26 @@ export default defineComponent({
       }
     }
 
+    watch(
+        currentBeautyshop,
+        () => {
+          store.dispatch(ActionTypes.SetCurrentBeautyshop, {
+            beautyshop: currentBeautyshop.value
+          });
+          updateList();
+        }
+    );
+
+    currentBeautyshop.value = beautyshopList ? beautyshopList[0] : null;
+
     return {
       checkInList,
       goToStatistics,
       cancelCheckIn,
       checkInUuidToCancel,
       showCancelPopup,
+      beautyshopList,
+      currentBeautyshop,
     }
   }
 })
