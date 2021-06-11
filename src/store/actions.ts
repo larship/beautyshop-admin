@@ -4,10 +4,12 @@ import { State } from './state';
 import { getBeautyshopCheckInList } from '@/services/checkIn';
 import { getBeautyshopListByAdmin } from '@/services/beautyshop';
 import Client from '@/models/Client';
-import { authClient } from '@/services/auth';
+import { authAdmin, authClient } from '@/services/auth';
+import Beautyshop from '@/models/Beautyshop';
 
 export enum ActionTypes {
   AuthorizeClient = 'AUTHORIZE_CLIENT',
+  AuthorizeAdmin = 'AUTHORIZE_ADMIN',
   GetBeautyshopCheckInList = 'GET_BEAUTYSHOP_CHECKIN_LIST',
   GetBeautyshopList = 'GET_BEAUTYSHOP_LIST',
   SetCurrentBeautyshop = 'SET_CURRENT_BEAUTYSHOP',
@@ -21,9 +23,14 @@ type ActionAugments = Omit<ActionContext<State, State>, 'commit'> & {
 }
 
 interface AuthorizeClientParams {
-  clientUuid?: string;
-  sessionId?: string;
-  salt?: string;
+  clientUuid: string;
+  sessionId: string;
+  salt: string;
+}
+
+interface AuthorizeAdminParams {
+  phone: string;
+  code: string;
 }
 
 interface GetBeautyshopCheckInListParams {
@@ -41,6 +48,8 @@ interface SetCurrentBeautyshopParams {
 }
 
 export type Actions = {
+  [ActionTypes.AuthorizeClient](context: ActionAugments, data: AuthorizeClientParams): Promise<Client | null>;
+  [ActionTypes.AuthorizeAdmin](context: ActionAugments, data: AuthorizeAdminParams): Promise<Client | null>;
   [ActionTypes.GetBeautyshopCheckInList](context: ActionAugments, data: GetBeautyshopCheckInListParams): void;
   [ActionTypes.GetBeautyshopList](context: ActionAugments, data: GetBeautyshopListParams): void;
   [ActionTypes.SetCurrentBeautyshop](context: ActionAugments, data: SetCurrentBeautyshopParams): void;
@@ -48,12 +57,13 @@ export type Actions = {
 
 export const actions: ActionTree<State, State> & Actions = {
   async [ActionTypes.AuthorizeClient]({commit}, data: AuthorizeClientParams): Promise<Client | null> {
-    if (!data?.clientUuid || !data?.sessionId || !data?.salt) {
-      console.log('AuthorizeClient fail: недостаточно данных');
-      return null;
-    }
-
     const client = await authClient(data.clientUuid, data.sessionId, data.salt);
+    commit(MutationType.SetClient, client);
+    return client;
+  },
+
+  async [ActionTypes.AuthorizeAdmin]({commit}, data: AuthorizeAdminParams): Promise<Client | null> {
+    const client = await authAdmin(data.phone, data.code);
     commit(MutationType.SetClient, client);
     return client;
   },
