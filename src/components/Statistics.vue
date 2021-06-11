@@ -45,7 +45,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const beautyshop = computed(() => {
-      return store.getters.getBeautyshop('73b00c6d-a503-46b2-ae50-2bf609a82973');
+      return store.getters.getCurrentBeautyshop();
     });
     const goToList = () => {
       router.push({name: 'CheckInList'/*, params: {uuid: '73b00c6d-a503-46b2-ae50-2bf609a82973'}*/});

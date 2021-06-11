@@ -10,6 +10,7 @@ export enum ActionTypes {
   AuthorizeClient = 'AUTHORIZE_CLIENT',
   GetBeautyshopCheckInList = 'GET_BEAUTYSHOP_CHECKIN_LIST',
   GetBeautyshopList = 'GET_BEAUTYSHOP_LIST',
+  SetCurrentBeautyshop = 'SET_CURRENT_BEAUTYSHOP',
 }
 
 type ActionAugments = Omit<ActionContext<State, State>, 'commit'> & {
@@ -35,10 +36,14 @@ interface GetBeautyshopListParams {
   adminUuid: string;
 }
 
+interface SetCurrentBeautyshopParams {
+  beautyshop: Beautyshop | null;
+}
+
 export type Actions = {
   [ActionTypes.GetBeautyshopCheckInList](context: ActionAugments, data: GetBeautyshopCheckInListParams): void;
   [ActionTypes.GetBeautyshopList](context: ActionAugments, data: GetBeautyshopListParams): void;
-  [ActionTypes.AuthorizeClient](context: ActionAugments, data: AuthorizeClientParams): Promise<Client | null>;
+  [ActionTypes.SetCurrentBeautyshop](context: ActionAugments, data: SetCurrentBeautyshopParams): void;
 }
 
 export const actions: ActionTree<State, State> & Actions = {
@@ -69,5 +74,9 @@ export const actions: ActionTree<State, State> & Actions = {
     commit(MutationType.SetBeautyshopList, beautyshops);
 
     commit(MutationType.SetLoading, false);
+  },
+
+  async [ActionTypes.SetCurrentBeautyshop]({commit}, data: SetCurrentBeautyshopParams) {
+    commit(MutationType.SetCurrentBeautyshop, data.beautyshop);
   },
 }

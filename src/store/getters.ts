@@ -9,7 +9,7 @@ export type Getters = {
   getClient(state: State): () => Client | null;
   getCheckInList(state: State): () => CheckInItem[] | null;
   getBeautyshopList(state: State): () => Beautyshop[] | null;
-  getBeautyshop(state: State): (uuid: string) => Beautyshop | null;
+  getCurrentBeautyshop(state: State): () => Beautyshop | null;
 }
 
 export const getters: GetterTree<State, State> & Getters = {
@@ -25,9 +25,9 @@ export const getters: GetterTree<State, State> & Getters = {
     return state.beautyshopList;
   },
 
-  getBeautyshop: (state: State) => (uuid: string) => {
+  getCurrentBeautyshop: (state: State) => () => {
     const beautyshopListFiltered = state.beautyshopList?.filter((beautyshop: Beautyshop) => {
-      return beautyshop.uuid === uuid;
+      return beautyshop.uuid === state.currentBeautyshopUuid;
     });
     const beautyshop = beautyshopListFiltered?.[0];
 

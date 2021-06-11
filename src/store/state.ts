@@ -7,6 +7,7 @@ export type State = {
   client: Client | null;
   checkInList: CheckInItem[] | null;
   beautyshopList: Beautyshop[] | null;
+  currentBeautyshopUuid: string;
 };
 
 export const state: State = {
@@ -14,4 +15,5 @@ export const state: State = {
   client: JSON.parse(localStorage.getItem('client') ?? 'null') as Client,
   checkInList: [],
   beautyshopList: JSON.parse(localStorage.getItem('beautyshop-list') ?? '[]') as Beautyshop[],
+  currentBeautyshopUuid: localStorage.getItem('current-beautyshop-uuid') ?? '',
 };
