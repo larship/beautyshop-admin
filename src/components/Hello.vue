@@ -1,7 +1,7 @@
 <template>
   <div class="hello-screen">
     <popup v-if="showSecurityCodeErrorPopup" @close-popup="showSecurityCodeErrorPopup = false"
-           title="Не удалось отправить код. Пожалуйста, попробуйте ещё раз." :two-buttons="false"></popup>
+           :title="securityCodeErrorText" :two-buttons="false"></popup>
     <div v-if="currentShowState === ShowState.phone">
       <span class="input-title">Ваш телефон:</span>
       <div class="input-container input-container__two-rows">
@@ -61,6 +61,7 @@ export default defineComponent({
     const securityCode = ref('');
     const store = useStore();
     const showSecurityCodeErrorPopup = ref(false);
+    const securityCodeErrorText = ref('');
 
     const phoneNumberChange = () => {
       const phone = phoneNumber.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,2})(\d{0,2})/);
@@ -77,9 +78,12 @@ export default defineComponent({
         case ShowState.phone:
           sendSecurityCode('7' + phoneNumber.value.replace(/\D/g, '')).then((status: boolean) => {
             if (!status) {
+              securityCodeErrorText.value = 'Не удалось отправить код. Пожалуйста, попробуйте ещё раз.';
               showSecurityCodeErrorPopup.value = true;
+              phoneNumber.value = '';
             } else {
               currentShowState.value = ShowState.code;
+              console.log('Проверочный код успешно отправлен, ждём его ввода');
             }
           });
           break;
@@ -89,12 +93,13 @@ export default defineComponent({
             phone: '7' + phoneNumber.value.replace(/\D/g, ''),
             code: securityCode.value
           }).then((client: Client | null) => {
-            if (client) {
+            if (!client) {
+              securityCodeErrorText.value = 'Введён неправильный код. Пожалуйста, попробуйте ещё раз.';
+              showSecurityCodeErrorPopup.value = true;
+              securityCode.value = '';
+            } else {
               router.push({name: 'CheckInList'});
               console.log('Администратор успешно авторизован, переходим в список заявок');
-            } else {
-              // @todo Показывать попап, что проверка кода не удалась
-              console.log('Не удалось авторизовать администратора');
             }
           });
 
@@ -128,6 +133,7 @@ export default defineComponent({
       phoneNumberChange,
       nextStep,
       showSecurityCodeErrorPopup,
+      securityCodeErrorText,
     }
   }
 })
