@@ -2,12 +2,11 @@
   text-align: left;
   margin: @pageMargin;
   display: grid;
-  grid-template-rows: 55px 1fr 50px;
+  grid-template-rows: 55px 55px 1fr 50px;
   grid-row-gap: 15px;
-  height: calc(100vh - @headerHeight - 17px);
+  height: calc(100vh - @headerHeight - @pageMargin * 2);
 
   .check-in-list {
-    max-height: calc(100vh - 148px);
     overflow-y: scroll;
 
     .check-in-item {
