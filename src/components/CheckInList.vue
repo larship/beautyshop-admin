@@ -5,6 +5,12 @@
         {{ beautyshop.name }}
       </option>
     </select>
+    <input
+        type="text"
+        placeholder="(XXX) XXX-XX-XX"
+        maxlength="15"
+        value="Дата с дата по"
+    />
     <div class="check-in-list">
       <div v-for="checkInItem in checkInList" v-bind:key="checkInItem.uuid"
            v-bind:class="{ 'active': checkInItem.isActive, 'cancelled': checkInItem.isDeleted }" class="check-in-item">
@@ -56,7 +62,7 @@ export default defineComponent({
 
     const store = useStore();
     const client = store.getters.getClient();
-    const beautyshopList = store.getters.getBeautyshopList();
+    const beautyshopList = store.getters.getBeautyshopList(); // @todo Не показывать лист-бокс выбора, если салон только один
     const showCancelPopup = ref(false);
     const checkInUuidToCancel = ref('');
     const currentBeautyshop = ref<Beautyshop | null>(null);

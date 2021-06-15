@@ -54,7 +54,6 @@ export function sendSecurityCode(phone: string): Promise<boolean> {
 
     return res.json();
   }).then((status: boolean) => {
-    console.log('sendSecurityCode:', status);
     return status;
   });
 }

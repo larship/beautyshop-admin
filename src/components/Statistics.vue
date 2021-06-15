@@ -1,9 +1,5 @@
 <template>
   <div class="statistics-screen">
-    <div class="todo-delete">
-      <br>TODO Добавить возможность выгрузки статистики
-      <br>TODO Добавить возможность выбора другого салона красоты
-    </div>
     <select>
       <option>Сахар</option>
       <option>Место красоты</option>
@@ -16,6 +12,8 @@
       <option>Всего</option>
     </select>
     <div class="info-statistics">
+      <br>TODO Добавить возможность выгрузки статистики
+      <br>TODO Добавить возможность выбора другого салона красоты
       <div class="info-statistics--summary">
         <span>Всего записано человек</span><span>0</span>
         <span>Оплачено услуг на сумму</span><span>0 руб.</span>
