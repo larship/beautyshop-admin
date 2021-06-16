@@ -1,5 +1,6 @@
 @import 'const';
 @import 'popup';
+@import 'beautyshop-change-form';
 @import 'screens/hello';
 @import 'screens/check-in-list';
 @import 'screens/statistics';
@@ -74,11 +75,14 @@ header {
   padding: @pageMargin;
   border-bottom: 1px solid #dddddd;
   box-shadow: 0 1px 3px 0 rgba(150, 150, 150, 0.5);
-  //margin-bottom: 10px;
 
   .header--title {
     display: flex;
     justify-content: space-between;
+
+    .title--change-beautyshop {
+      text-decoration: underline;
+    }
   }
 }
 

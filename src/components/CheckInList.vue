@@ -125,9 +125,12 @@ export default defineComponent({
             beautyshop: currentBeautyshop.value
           });
           updateList();
+
+          console.log('watch currentBeautyshop');
         }
     );
 
+    // @todo Выбирать текущий сохранённый beautyshop
     currentBeautyshop.value = beautyshopList ? beautyshopList[0] : null;
 
     return {

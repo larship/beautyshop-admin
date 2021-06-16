@@ -3,7 +3,9 @@
     <header v-if="needShowHeader">
       <div class="header--title">
         <span>{{ routeTitle }}</span>
+        <span class="title--change-beautyshop" v-on:click="isBeautyshopChangeFormShow = true">Сменить салон</span>
       </div>
+      <BeautyshopChangeForm v-bind:is-open="isBeautyshopChangeFormShow" @closed="isBeautyshopChangeFormShow = false"></BeautyshopChangeForm>
     </header>
     <router-view/>
   </div>
@@ -14,11 +16,14 @@ import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { useStore } from '@/store';
 import router from '@/router';
 import { MutationType } from '@/store/mutations';
+import BeautyshopChangeForm from '@/components/BeautyshopChangeForm.vue';
 
 export default defineComponent({
+  components: {BeautyshopChangeForm},
   setup() {
     const store = useStore();
     const needShowHeader = ref(false);
+    const isBeautyshopChangeFormShow = ref(false);
 
     const getRouteTitle = (route: RouteLocationNormalizedLoaded) => {
       const beautyshop = store.getters.getCurrentBeautyshop();
@@ -53,6 +58,7 @@ export default defineComponent({
     return {
       needShowHeader,
       routeTitle,
+      isBeautyshopChangeFormShow,
     }
   }
 })
