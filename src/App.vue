@@ -1,18 +1,15 @@
 <template>
   <div class="app-container">
     <header v-if="needShowHeader">
-      <div class="header--title">
-        <span>{{ routeTitle }}</span>
-        <span class="title--change-beautyshop" v-on:click="isBeautyshopChangeFormShow = true">Сменить салон</span>
-      </div>
-      <BeautyshopChangeForm v-bind:is-open="isBeautyshopChangeFormShow" @closed="isBeautyshopChangeFormShow = false"></BeautyshopChangeForm>
+      <span class="header--title">{{ routeTitle }}</span>
+      <span class="header--change-beautyshop" v-on:click="isBeautyshopChangeFormShow = true">Изменить</span>
     </header>
+    <BeautyshopChangeForm v-bind:is-open="isBeautyshopChangeFormShow" @closed="isBeautyshopChangeFormShow = false"></BeautyshopChangeForm>
     <router-view/>
   </div>
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { RouteLocationNormalizedLoaded } from 'vue-router';
 import { useStore } from '@/store';
 import router from '@/router';
 import { MutationType } from '@/store/mutations';
@@ -25,33 +22,23 @@ export default defineComponent({
     const needShowHeader = ref(false);
     const isBeautyshopChangeFormShow = ref(false);
 
-    const getRouteTitle = (route: RouteLocationNormalizedLoaded) => {
-      const beautyshop = store.getters.getCurrentBeautyshop();
-
-      switch (route.name) {
-        case 'CheckInList':
-          return 'Список записей - ' + beautyshop?.name;
-
-        case 'Statistics':
-          return 'Статистика - ' + beautyshop?.name;
-      }
-
-      return '';
+    const getRouteTitle = () => {
+      return store.getters.getCurrentBeautyshop()?.name;
     };
 
-    const routeTitle = ref(getRouteTitle(router.currentRoute.value));
+    const routeTitle = ref(getRouteTitle());
 
     watch(
         () => router.currentRoute.value,
         (value) => {
-          routeTitle.value = getRouteTitle(value);
+          // routeTitle.value = getRouteTitle(value);
           needShowHeader.value = value.name != 'Hello';
         }
     );
 
     store.subscribe((mutation) => {
       if (mutation.type === MutationType.SetCurrentBeautyshop) {
-        routeTitle.value = getRouteTitle(router.currentRoute.value);
+        routeTitle.value = getRouteTitle();
       }
     });
 
