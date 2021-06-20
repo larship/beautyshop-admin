@@ -1,16 +1,5 @@
 <template>
   <div class="check-in-list-screen">
-    <select v-model="currentBeautyshop">
-      <option v-for="beautyshop in beautyshopList" v-bind:key="beautyshop.uuid" v-bind:value="beautyshop">
-        {{ beautyshop.name }}
-      </option>
-    </select>
-    <input
-        type="text"
-        placeholder="(XXX) XXX-XX-XX"
-        maxlength="15"
-        value="Дата с дата по"
-    />
     <div class="check-in-list">
       <div v-for="checkInItem in checkInList" v-bind:key="checkInItem.uuid"
            v-bind:class="{ 'active': checkInItem.isActive, 'cancelled': checkInItem.isDeleted }" class="check-in-item">
