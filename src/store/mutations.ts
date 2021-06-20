@@ -38,7 +38,7 @@ export const mutations: MutationTree<State> & Mutations = {
 
   [MutationType.SetCurrentBeautyshop](state, value) {
     state.currentBeautyshopUuid = value ? value.uuid : '';
-    localStorage.setItem('current-beautyshop-uuid', JSON.stringify(state.currentBeautyshopUuid));
+    localStorage.setItem('current-beautyshop-uuid', state.currentBeautyshopUuid);
   },
 
   [MutationType.SetCheckInList](state, value) {

@@ -1,10 +1,6 @@
 <template>
   <div class="statistics-screen">
     <select>
-      <option>Сахар</option>
-      <option>Место красоты</option>
-    </select>
-    <select>
       <option>Сегодня</option>
       <option>Вчера</option>
       <option>Неделя</option>
