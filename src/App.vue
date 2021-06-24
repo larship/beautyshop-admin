@@ -1,10 +1,12 @@
 <template>
   <div class="app-container">
-    <header v-if="needShowHeader">
+    <header v-if="needShowHeader" v-bind:class="{ 'two-rows': needShowChangeChangeForm }">
       <span class="header--title">{{ routeTitle }}</span>
-      <span class="header--change-beautyshop" v-on:click="isBeautyshopChangeFormShow = true">Изменить</span>
+      <span v-if="needShowChangeChangeForm" class="header--change-beautyshop"
+            v-on:click="isBeautyshopChangeFormShow = true">Изменить</span>
     </header>
-    <BeautyshopChangeForm v-bind:is-open="isBeautyshopChangeFormShow" @closed="isBeautyshopChangeFormShow = false"></BeautyshopChangeForm>
+    <BeautyshopChangeForm v-bind:is-open="isBeautyshopChangeFormShow"
+                          @closed="isBeautyshopChangeFormShow = false"></BeautyshopChangeForm>
     <router-view/>
   </div>
 </template>
@@ -20,6 +22,7 @@ export default defineComponent({
   setup() {
     const store = useStore();
     const needShowHeader = ref(false);
+    const needShowChangeChangeForm = store.getters.getBeautyshopList()?.length ?? 0 > 1;
     const isBeautyshopChangeFormShow = ref(false);
 
     const getRouteTitle = () => {
@@ -31,7 +34,6 @@ export default defineComponent({
     watch(
         () => router.currentRoute.value,
         (value) => {
-          // routeTitle.value = getRouteTitle(value);
           needShowHeader.value = value.name != 'Hello';
         }
     );
@@ -45,6 +47,7 @@ export default defineComponent({
     return {
       needShowHeader,
       routeTitle,
+      needShowChangeChangeForm,
       isBeautyshopChangeFormShow,
     }
   }

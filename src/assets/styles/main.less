@@ -75,8 +75,11 @@ header {
   padding: @pageMargin;
   border-bottom: 1px solid #dddddd;
   box-shadow: 0 1px 3px 0 rgba(150, 150, 150, 0.5);
-  display: grid;
-  grid-template-columns: 1fr 100px;
+
+  &.two-rows {
+    display: grid;
+    grid-template-columns: 1fr 100px;
+  }
 
   .header--title {
     overflow: hidden;
