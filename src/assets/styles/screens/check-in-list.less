@@ -9,12 +9,24 @@
   .check-in-list {
     overflow-y: scroll;
 
+    &--choose-interval {
+      display: grid;
+      grid-template-columns: 1fr 30px 1fr;
+      width: calc(100vw - @pageMargin * 2);
+      align-items: center;
+      text-align: center;
+
+      input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+    }
+
     .check-in-item {
       display: grid;
-      grid-template-columns: 1fr 140px 20px;
-      padding: 10px;
-      padding-top: 15px;
-      padding-bottom: 15px;
+      grid-template-columns: 1fr 140px;
+      padding: 5px;
+      align-items: center;
       border-top: 1px solid #c8c8c8;
       border-bottom: 1px solid #c8c8c8;
       background-color: #ffffff;
@@ -28,10 +40,8 @@
         background-color: #dddddd;
       }
 
-      &--cancel {
-        align-self: center;
-        background: none;
-        padding: 0;
+      &--price {
+        text-align: right;
       }
     }
 

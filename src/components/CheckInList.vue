@@ -1,13 +1,16 @@
 <template>
   <div class="check-in-list-screen">
+    <div class="check-in-list--choose-interval">
+      <input type="date"><span>&mdash;</span><input type="date">
+    </div>
     <div class="check-in-list">
       <div v-for="checkInItem in checkInList" v-bind:key="checkInItem.uuid"
            v-bind:class="{ 'active': checkInItem.isActive, 'cancelled': checkInItem.isDeleted }" class="check-in-item">
         <div>
-          {{ checkInItem.beautyshopName }}<br>
-          {{ checkInItem.serviceTypeName }} - {{ checkInItem.workerName }}
+          {{ checkInItem.serviceTypeName }}<br>
+          {{ checkInItem.workerName }}
         </div>
-        <div>
+        <div class="check-in-item--price">
           {{ checkInItem.startDate }}<br>
           {{ checkInItem.price }} рублей
         </div>
@@ -23,7 +26,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue';
+import { computed, defineComponent, onUnmounted, ref } from 'vue';
 import { useStore } from '@/store';
 import { ActionTypes } from '@/store/actions';
 import CheckInItem from '@/models/CheckInItem';
@@ -32,6 +35,7 @@ import LocaleRu from 'dayjs/locale/ru';
 import Utc from 'dayjs/plugin/utc';
 import router from '@/router';
 import Beautyshop from '@/models/Beautyshop';
+import { MutationType } from '@/store/mutations';
 
 interface CheckInViewItem {
   uuid: string;
@@ -51,7 +55,6 @@ export default defineComponent({
 
     const store = useStore();
     const client = store.getters.getClient();
-    const beautyshopList = store.getters.getBeautyshopList(); // @todo Не показывать лист-бокс выбора, если салон только один
     const showCancelPopup = ref(false);
     const checkInUuidToCancel = ref('');
     const currentBeautyshop = ref<Beautyshop | null>(null);
@@ -82,9 +85,11 @@ export default defineComponent({
     }
 
     const updateList = () => {
-      if (client && currentBeautyshop.value) {
+      const currentBeautyshop = store.getters.getCurrentBeautyshop();
+
+      if (client && currentBeautyshop) {
         store.dispatch(ActionTypes.GetBeautyshopCheckInList, {
-          beautyshopUuid: currentBeautyshop.value.uuid,
+          beautyshopUuid: currentBeautyshop.uuid,
           dateFrom: dayjs().startOf('year').utc().format('YYYY-MM-DD HH:mm:ss'),
           dateTo: dayjs().endOf('year').utc().format('YYYY-MM-DD HH:mm:ss'),
         });
@@ -107,20 +112,18 @@ export default defineComponent({
       }
     }
 
-    watch(
-        currentBeautyshop,
-        () => {
-          store.dispatch(ActionTypes.SetCurrentBeautyshop, {
-            beautyshop: currentBeautyshop.value
-          });
-          updateList();
+    const unsubscribe = store.subscribe((mutation) => {
+      if (mutation.type === MutationType.SetCurrentBeautyshop || mutation.type === MutationType.SetBeautyshopList) {
+        console.log('mutation.type', mutation.type);
 
-          console.log('watch currentBeautyshop');
-        }
-    );
+        updateList();
+      }
+    });
 
-    // @todo Выбирать текущий сохранённый beautyshop
-    currentBeautyshop.value = beautyshopList ? beautyshopList[0] : null;
+    onUnmounted(() => {
+      console.log('onDeactivated');
+      unsubscribe();
+    });
 
     return {
       checkInList,
@@ -128,7 +131,6 @@ export default defineComponent({
       cancelCheckIn,
       checkInUuidToCancel,
       showCancelPopup,
-      beautyshopList,
       currentBeautyshop,
     }
   }
