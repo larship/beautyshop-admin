@@ -23,6 +23,9 @@
       </div>
     </div>
     <div class="buttons-container buttons-container__single">
+      <button @click="goToList()">Экспорт</button>
+    </div>
+    <div class="buttons-container buttons-container__single">
       <button @click="goToList()">К списку записей</button>
     </div>
   </div>

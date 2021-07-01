@@ -1,5 +1,5 @@
 import CheckInItem from '@/models/CheckInItem';
-import { fetchDataList } from '@/api';
+import { fetchDataList, sendData } from '@/api';
 
 export async function getBeautyshopCheckInList(beautyshopUuid: string, dateFrom: string, dateTo: string): Promise<CheckInItem[] | null> {
   const params = new URLSearchParams({
@@ -10,4 +10,10 @@ export async function getBeautyshopCheckInList(beautyshopUuid: string, dateFrom:
   });
 
   return await fetchDataList<CheckInItem>('/check-in/list-for-beautyshop?' + params.toString());
+}
+
+export async function cancelCheckIn(uuid: string): Promise<boolean | null> {
+  return await sendData<boolean>('/check-in/cancel', {
+    uuid
+  });
 }

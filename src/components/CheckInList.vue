@@ -1,10 +1,14 @@
 <template>
+  <popup v-if="showCancelPopup" @submit-popup="showCancelPopup = false; cancelCheckIn(checkInUuidToCancel, true)"
+         @close-popup="showCancelPopup = false" title="Вы уверены, что хотите отменить запись?"
+         :two-buttons="true"></popup>
   <div class="check-in-list-screen">
     <div class="check-in-list--choose-interval">
       <input type="date"><span>&mdash;</span><input type="date">
     </div>
     <div class="check-in-list">
       <div v-for="checkInItem in checkInList" v-bind:key="checkInItem.uuid"
+           @click="checkInItem.isActive && cancelCheckIn(checkInItem.uuid, false)"
            v-bind:class="{ 'active': checkInItem.isActive, 'cancelled': checkInItem.isDeleted }" class="check-in-item">
         <div>
           {{ checkInItem.serviceTypeName }}<br>
@@ -14,9 +18,6 @@
           {{ checkInItem.startDate }}<br>
           {{ checkInItem.price }} рублей
         </div>
-        <button v-if="checkInItem.isActive" @click="cancelCheckIn(checkInItem.uuid, false)"
-                class="check-in-item--cancel">X
-        </button>
       </div>
     </div>
     <div class="buttons-container buttons-container__single">
@@ -36,6 +37,7 @@ import Utc from 'dayjs/plugin/utc';
 import router from '@/router';
 import Beautyshop from '@/models/Beautyshop';
 import { MutationType } from '@/store/mutations';
+import Popup from '@/components/Popup.vue';
 
 interface CheckInViewItem {
   uuid: string;
@@ -49,6 +51,7 @@ interface CheckInViewItem {
 }
 
 export default defineComponent({
+  components: {Popup},
   setup() {
     dayjs.locale(LocaleRu);
     dayjs.extend(Utc);
@@ -107,7 +110,7 @@ export default defineComponent({
         checkInUuidToCancel.value = checkInUuid;
         showCancelPopup.value = true;
       } else {
-        // store.dispatch(ActionTypes.CancelCheckIn, {checkInUuid});
+        store.dispatch(ActionTypes.CancelCheckIn, {checkInUuid});
         updateList();
       }
     }
