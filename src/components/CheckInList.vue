@@ -8,7 +8,7 @@
     </div>
     <div class="check-in-list">
       <div v-for="checkInItem in checkInList" v-bind:key="checkInItem.uuid"
-           @click="checkInItem.isActive && cancelCheckIn(checkInItem.uuid, false)"
+           @click="checkInItem.canCancel && cancelCheckIn(checkInItem.uuid, false)"
            v-bind:class="{ 'active': checkInItem.isActive, 'cancelled': checkInItem.isDeleted }" class="check-in-item">
         <div>
           {{ checkInItem.serviceTypeName }}<br>
@@ -34,6 +34,7 @@ import CheckInItem from '@/models/CheckInItem';
 import dayjs from 'dayjs';
 import LocaleRu from 'dayjs/locale/ru';
 import Utc from 'dayjs/plugin/utc';
+import Duration from 'dayjs/plugin/duration';
 import router from '@/router';
 import Beautyshop from '@/models/Beautyshop';
 import { MutationType } from '@/store/mutations';
@@ -48,6 +49,7 @@ interface CheckInViewItem {
   price: string;
   isDeleted: boolean;
   isActive: boolean;
+  canCancel: boolean;
 }
 
 export default defineComponent({
@@ -55,6 +57,7 @@ export default defineComponent({
   setup() {
     dayjs.locale(LocaleRu);
     dayjs.extend(Utc);
+    dayjs.extend(Duration);
 
     const store = useStore();
     const client = store.getters.getClient();
@@ -78,7 +81,9 @@ export default defineComponent({
           startDate: dayjs(checkInItem.startDate).format('D MMMM, HH:mm'),
           price: checkInItem.price as unknown as string,
           isDeleted: checkInItem.deleted,
-          isActive: dayjs(checkInItem.endDate).isAfter(dayjs()) && !checkInItem.deleted,
+          isActive: dayjs().isBefore(dayjs(checkInItem.endDate)) && !checkInItem.deleted,
+          // Чтобы можно было отменять за предыдущий день, когда клиент не пришел, например
+          canCancel: dayjs().add(dayjs.duration({'days': 1})).isBefore(dayjs(checkInItem.endDate)) && !checkInItem.deleted,
         };
       });
     });
